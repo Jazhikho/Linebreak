@@ -103,7 +103,25 @@ public sealed class SpectreTerminalRenderer : ITerminalRenderer
     /// <inheritdoc/>
     public void WriteRule(string title)
     {
-        _console.Write(new Rule(title));
+        _console.Write(new Rule(Markup.Escape(title)));
+    }
+
+    /// <inheritdoc/>
+    public string EscapeMarkup(string text)
+    {
+        return Markup.Escape(text);
+    }
+
+    /// <inheritdoc/>
+    public void WriteLabeledValue(string label, string value)
+    {
+        _console.MarkupLine($"[yellow]{Markup.Escape(label)}:[/] {Markup.Escape(value)}");
+    }
+
+    /// <inheritdoc/>
+    public void WriteLabeledValue(string label, string value, string valueColor)
+    {
+        _console.MarkupLine($"[yellow]{Markup.Escape(label)}:[/] [{valueColor}]{Markup.Escape(value)}[/]");
     }
 }
 

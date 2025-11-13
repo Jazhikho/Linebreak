@@ -42,11 +42,13 @@ public sealed class StatusCommand : ICommand
     /// <inheritdoc/>
     public CommandResult Execute(ParsedCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         _renderer.WriteRule("System Status");
         _renderer.WriteBlankLine();
-        _renderer.WriteMarkupLine($"[yellow]Session ID:[/] {_gameState.SessionId}");
-        _renderer.WriteMarkupLine($"[yellow]Current Time:[/] {_gameState.Clock.GetFormattedTime()}");
-        _renderer.WriteMarkupLine($"[yellow]Current Act:[/] {_gameState.CurrentAct} of {GameConstants.MaxAct}");
+        _renderer.WriteLabeledValue("Session ID", _gameState.SessionId.ToString());
+        _renderer.WriteLabeledValue("Current Time", _gameState.Clock.GetFormattedTime());
+        _renderer.WriteLabeledValue("Current Act", $"{_gameState.CurrentAct} of {GameConstants.MaxAct}");
         _renderer.WriteMarkupLine($"[yellow]Session Active:[/] {(_gameState.IsRunning ? "[green]Yes[/]" : "[red]No[/]")}");
         _renderer.WriteMarkupLine($"[yellow]Player Credibility:[/] {GetCredibilityDisplay()}");
 

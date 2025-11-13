@@ -38,6 +38,8 @@ public sealed class ClearCommand : ICommand
     /// <inheritdoc/>
     public CommandResult Execute(ParsedCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         _renderer.Clear();
         return CommandResult.Ok();
     }

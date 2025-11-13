@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // File Responsibility: Centralizes all command identifiers to keep names
 // consistent across the application and tests.
-// Key Members: CommandName constants (Help, Status, Clear, Quit, Exit, Time).
+// Key Members: CommandName constants (Help, Status, Clear, Quit, Exit, Time, History, Log, Scheduler, Random).
 // -----------------------------------------------------------------------------
 namespace Linebreak.Commands;
 
@@ -40,5 +40,25 @@ public static class CommandName
     /// The time command name.
     /// </summary>
     public const string Time = "time";
+
+    /// <summary>
+    /// The history command name.
+    /// </summary>
+    public const string History = "history";
+
+    /// <summary>
+    /// The log command name.
+    /// </summary>
+    public const string Log = "log";
+
+    /// <summary>
+    /// The scheduler command name.
+    /// </summary>
+    public const string Scheduler = "scheduler";
+
+    /// <summary>
+    /// The random command name.
+    /// </summary>
+    public const string Random = "random";
 }
 

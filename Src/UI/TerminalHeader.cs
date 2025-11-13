@@ -30,8 +30,8 @@ public sealed class TerminalHeader
     public void RenderBanner()
     {
         _renderer.WriteMarkupLine("[bold green]╔════════════════════════════════════════╗[/]");
-        _renderer.WriteMarkupLine("[bold green]║[/]       [bold white]L I N E B R E A K[/]              [bold green]║[/]");
-        _renderer.WriteMarkupLine("[bold green]║[/]    [dim]State-Civilian Data Exchange[/]     [bold green]║[/]");
+        _renderer.WriteMarkupLine("[bold green]║[/]         [bold white]L I N E B R E A K[/]              [bold green]║[/]");
+        _renderer.WriteMarkupLine("[bold green]║[/]      [dim]State-Civilian Data Exchange[/]      [bold green]║[/]");
         _renderer.WriteMarkupLine("[bold green]╚════════════════════════════════════════╝[/]");
         _renderer.WriteBlankLine();
     }

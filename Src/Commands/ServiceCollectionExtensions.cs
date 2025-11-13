@@ -26,11 +26,16 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<CommandParser>();
         services.AddSingleton<CommandRegistry>();
         services.AddSingleton<CommandExecutor>();
+        services.AddSingleton<CommandHistory>();
         services.AddSingleton<ICommand, HelpCommand>();
         services.AddSingleton<ICommand, StatusCommand>();
         services.AddSingleton<ICommand, ClearCommand>();
         services.AddSingleton<ICommand, QuitCommand>();
         services.AddSingleton<ICommand, TimeCommand>();
+        services.AddSingleton<ICommand, HistoryCommand>();
+        services.AddSingleton<ICommand, LogCommand>();
+        services.AddSingleton<ICommand, SchedulerCommand>();
+        services.AddSingleton<ICommand, RandomCommand>();
 
         return services;
     }

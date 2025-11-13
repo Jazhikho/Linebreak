@@ -38,6 +38,8 @@ public sealed class QuitCommand : ICommand
     /// <inheritdoc/>
     public CommandResult Execute(ParsedCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         _renderer.WriteMarkupLine("[yellow]Logging off...[/]");
         _renderer.WriteLine("Session terminated. Goodbye, Technician.");
         return CommandResult.Exit("User requested exit.");

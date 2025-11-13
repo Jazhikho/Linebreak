@@ -42,6 +42,8 @@ public sealed class TimeCommand : ICommand
     /// <inheritdoc/>
     public CommandResult Execute(ParsedCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         if (command.Arguments.Count == 0)
         {
             return ShowCurrentTime();
@@ -60,7 +62,7 @@ public sealed class TimeCommand : ICommand
 
     private CommandResult ShowCurrentTime()
     {
-        _renderer.WriteMarkupLine($"[yellow]Current Time:[/] {_gameState.Clock.GetFormattedTime()}");
+        _renderer.WriteLabeledValue("Current Time", _gameState.Clock.GetFormattedTime());
 
         if (_gameState.Clock.IsWorkingHours())
         {
@@ -88,6 +90,12 @@ public sealed class TimeCommand : ICommand
             return CommandResult.Fail("Minutes must be positive.");
         }
 
+        if (minutes > 10000)
+        {
+            _renderer.WriteError("Cannot advance more than 10000 minutes (approximately one week) at once.");
+            return CommandResult.Fail("Minutes too large.");
+        }
+
         if (!_gameState.IsRunning)
         {
             _renderer.WriteError("Cannot advance time when session is not active.");
@@ -95,10 +103,17 @@ public sealed class TimeCommand : ICommand
         }
 
         string beforeTime = _gameState.Clock.GetFormattedTime();
-        long ticksToAdvance = minutes * GameConstants.TicksPerMinute;
+        long ticksToAdvance = checked((long)minutes * GameConstants.TicksPerMinute);
+        long newTotalTicks = _gameState.Clock.TotalTicks + ticksToAdvance;
+
+        int newDay = (int)(newTotalTicks / GameConstants.TicksPerDay) + 1;
+        int newHour = (int)((newTotalTicks % GameConstants.TicksPerDay) / GameConstants.TicksPerHour);
+        int newMinute = (int)((newTotalTicks % GameConstants.TicksPerHour) / GameConstants.TicksPerMinute);
+        string afterTime = $"Day {newDay}, {newHour:D2}:{newMinute:D2}";
 
         _renderer.WriteMarkupLine($"[dim]Time advanced by {minutes} minute(s).[/]");
-        _renderer.WriteMarkupLine($"[yellow]Previous:[/] {beforeTime}");
+        _renderer.WriteLabeledValue("Previous", beforeTime);
+        _renderer.WriteLabeledValue("Current", afterTime);
 
         return CommandResult.OkWithTime($"Advanced {minutes} minutes.", ticksToAdvance);
     }

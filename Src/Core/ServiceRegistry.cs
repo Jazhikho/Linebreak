@@ -1,9 +1,12 @@
 // -----------------------------------------------------------------------------
 // File Responsibility: Provides extension methods to register core services into
 // the dependency injection container, ensuring a single composition root.
-// Key Members: ServiceRegistry.AddCoreServices wiring GameState and EventBus.
+// Key Members: ServiceRegistry.AddCoreServices wiring GameState, EventBus, and supporting services.
 // -----------------------------------------------------------------------------
 using System;
+using Linebreak.Core.Logging;
+using Linebreak.Core.Random;
+using Linebreak.Core.Scheduling;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Linebreak.Core;
@@ -26,6 +29,9 @@ public static class ServiceRegistry
 
         services.AddSingleton<GameState>();
         services.AddSingleton<IEventBus, EventBus>();
+        services.AddSingleton<IRandomSource, SeededRandomSource>();
+        services.AddSingleton<IGameLog, GameLog>();
+        services.AddSingleton<IEventScheduler, EventScheduler>();
 
         return services;
     }

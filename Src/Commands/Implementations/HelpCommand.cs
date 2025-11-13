@@ -3,6 +3,8 @@
 // or detailed usage for a specific command using the terminal renderer.
 // Key Members: HelpCommand.Execute, ShowAllCommands, ShowCommandHelp.
 // -----------------------------------------------------------------------------
+using System;
+using System.Linq;
 using Linebreak.UI;
 
 namespace Linebreak.Commands.Implementations;
@@ -41,6 +43,8 @@ public sealed class HelpCommand : ICommand
     /// <inheritdoc/>
     public CommandResult Execute(ParsedCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         if (command.Arguments.Count > 0)
         {
             return ShowCommandHelp(command.Arguments[0]);
@@ -56,7 +60,9 @@ public sealed class HelpCommand : ICommand
 
         foreach (ICommand cmd in _registry.GetAllCommands().OrderBy(c => c.Name))
         {
-            _renderer.WriteMarkupLine($"  [yellow]{cmd.Name,-12}[/] {cmd.Description}");
+            string escapedName = _renderer.EscapeMarkup(cmd.Name);
+            string escapedDescription = _renderer.EscapeMarkup(cmd.Description);
+            _renderer.WriteMarkupLine($"  [yellow]{escapedName}[/] {escapedDescription}");
         }
 
         _renderer.WriteBlankLine();
@@ -68,18 +74,18 @@ public sealed class HelpCommand : ICommand
     {
         if (!_registry.TryGetCommand(commandName, out ICommand? cmd))
         {
-            _renderer.WriteError($"Unknown command: '{commandName}'");
+            _renderer.WriteError($"Unknown command: '{_renderer.EscapeMarkup(commandName)}'");
             return CommandResult.Fail($"Unknown command: {commandName}");
         }
 
         _renderer.WriteRule(cmd!.Name.ToUpperInvariant());
         _renderer.WriteBlankLine();
-        _renderer.WriteMarkupLine($"[yellow]Description:[/] {cmd.Description}");
-        _renderer.WriteMarkupLine($"[yellow]Usage:[/] {cmd.Usage}");
+        _renderer.WriteMarkupLine($"[yellow]Description:[/] {_renderer.EscapeMarkup(cmd.Description)}");
+        _renderer.WriteMarkupLine($"[yellow]Usage:[/] {_renderer.EscapeMarkup(cmd.Usage)}");
 
         if (cmd.Aliases.Count > 0)
         {
-            string aliasesText = string.Join(", ", cmd.Aliases);
+            string aliasesText = string.Join(", ", cmd.Aliases.Select(_renderer.EscapeMarkup));
             _renderer.WriteMarkupLine($"[yellow]Aliases:[/] {aliasesText}");
         }
 

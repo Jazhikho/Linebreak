@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Src\Commands\Linebreak.Commands.csproj" />
+    <ProjectReference Include="..\..\Src\Core\Linebreak.Core.csproj" />
+    <ProjectReference Include="..\..\Src\UI\Linebreak.UI.csproj" />
   </ItemGroup>
 </Project>
 

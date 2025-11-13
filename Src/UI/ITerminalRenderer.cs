@@ -80,5 +80,27 @@ public interface ITerminalRenderer
     /// </summary>
     /// <param name="title">The title to display in the rule.</param>
     void WriteRule(string title);
+
+    /// <summary>
+    /// Escapes text so it can be safely rendered as markup.
+    /// </summary>
+    /// <param name="text">The text to escape.</param>
+    /// <returns>The escaped text.</returns>
+    string EscapeMarkup(string text);
+
+    /// <summary>
+    /// Writes a labeled value with markup-safe output.
+    /// </summary>
+    /// <param name="label">The label to display.</param>
+    /// <param name="value">The value to display.</param>
+    void WriteLabeledValue(string label, string value);
+
+    /// <summary>
+    /// Writes a labeled value with a colored value segment.
+    /// </summary>
+    /// <param name="label">The label to display.</param>
+    /// <param name="value">The value to display.</param>
+    /// <param name="valueColor">The color for the value segment.</param>
+    void WriteLabeledValue(string label, string value, string valueColor);
 }
 
