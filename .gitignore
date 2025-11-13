@@ -1,0 +1,26 @@
+# Build artifacts
+bin/
+obj/
+dist/
+publish/
+*.user
+*.suo
+
+# IDE settings
+.vs/
+.vscode/
+.idea/
+
+# Logs and caches
+*.log
+*.cache
+
+# Tool artifacts
+Tools/**/vendor/
+Tools/**/node_modules/
+
+# OS-specific files
+Thumbs.db
+desktop.ini
+
+

@@ -1,0 +1,77 @@
+---
+alwaysApply: true
+---
+
+## Linebreak Project Rules
+
+These rules extend the global Cursor user rules for this project’s non-engine C# console architecture. Follow them for every contribution.
+
+### 1. Technology Baseline
+
+- Target **.NET 8** console application with optional ANSI rendering.
+- Use **Spectre.Console** for rich terminal UI unless a feature requires a different library (justify alternatives in PR).
+- Keep the codebase cross-platform (Windows + Linux). Avoid platform-specific APIs; if unavoidable, wrap them behind interfaces with explicit guards.
+
+### 2. Project Structure
+
+- Directories use **PascalCase**. Core layout:
+  - `Src` – production code organised by module (`Core`, `UI`, `Simulation`, `Conspiracies`, `Commands`, `Saves`, `Data`).
+  - `Tests` – `.NET` test projects mirroring the `Src` module structure.
+  - `Docs` – design docs, technical notes, onboarding material.
+  - `Build` – packaging scripts, CI/CD definitions, published artifacts (ignored via `.gitignore`).
+  - `Tools` – developer utilities, generators, schema compilers.
+- Place narrative JSON, tuning tables, and localisation files inside `Src/Data`. Use subfolders per system (`Narrative`, `Events`, `Locales`, etc.) with README stubs.
+- Binary assets (audio, video, archives) must go under `Tools` or a dedicated `Assets` directory and be tracked via Git LFS. Update `.gitattributes` before committing large binaries.
+
+### 3. Coding Standards
+
+- **Explicit typing everywhere**; do not use `var` when the type is not obvious. Prefer `readonly`/`const` for configuration values.
+- **No ternary operators**. Use clear `if` blocks.
+- Keep public APIs and files small: target **~10 methods per class**; if exceeding, refactor.
+- Provide XML doc comments for every public class, method, and property describing purpose, parameters, and return values.
+- Organise classes: fields, constructors, public members, internal/protected, then private helpers.
+- Treat warnings as errors. Resolve analyzers and linters before pushing.
+
+### 4. Command & Simulation Design
+
+- Commands live in `Src/Commands` and implement a shared interface (to be defined during prototype). Handle parsing, validation, execution separately.
+- Simulation systems (network noise, anomalies, reputation) reside in `Src/Simulation` with deterministic, testable services. No UI logic here.
+- Narrative branching and conspiracy metadata live in `Src/Conspiracies`. Keep data-driven behaviours in JSON or YAML, not hard-coded logic.
+- Persist saves through `Src/Saves` using SQLite; migrations must be versioned and idempotent.
+
+### 5. UI & Interaction
+
+- Terminal presentation components stay in `Src/UI`. Cache expensive layouts; avoid per-frame allocations.
+- Provide accessibility options (high-contrast palette, slow mode) as configuration toggles under `Src/Core`.
+- Log messages must include contextual identifiers (command name, node id, etc.). Remove debug logging before merge.
+
+### 6. Testing & Quality
+
+- All non-trivial logic requires unit tests in `Tests`. Focus on parsing, simulation outcomes, reputation adjustments, and ending resolution.
+- Add integration tests for key story branches; use fixtures that seed narrative data from `Src/Data`.
+- Before every PR: run `dotnet test` and document coverage of new features.
+
+### 7. Workflow Expectations
+
+- Follow the loop: **Survey → Plan → Implement → Test → Polish**.
+- Document planned classes/functions in the PR description for major features.
+- Update documentation (`Docs`) when adding systems, commands, or data formats.
+- Use feature flags or configuration toggles for incomplete systems rather than commenting out code.
+
+### 8. Packaging & Deployment
+
+- Use `dotnet publish -c Release -r win-x64 --self-contained true --output Build/dist/win-x64` and equivalent commands for Linux.
+- Store packaging scripts in `Build/Scripts`. Generated artifacts belong in `Build/Artifacts` and are ignored by git.
+- Maintain release notes in `Docs/Changelog.md` (create on first release).
+
+### 9. Tooling & Automation
+
+- Pin third-party tool versions (e.g., code generators) and document usage in `Tools/README.md`.
+- Keep CI configurations in `Build/Pipelines`. Pipelines must run tests and publish artifacts.
+- Apply formatters/analyzers consistently. Add custom Roslyn analyzers if the base ruleset misses project-specific constraints.
+
+### 10. Collaboration Notes
+
+- No silent fallbacks. Throw descriptive exceptions when state is invalid.
+- Prefer events or messaging over global singletons. If a global registry is required (e.g., for command descriptors), centralise it in `Src/Core` and document the lifecycle.
+- Share identifiers through a single source of truth (e.g., enums or config files). Never duplicate string literals for command names.
