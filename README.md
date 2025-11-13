@@ -13,7 +13,18 @@ Linebreak is a narrative hacking simulation built as a standalone C# console app
 ### Getting Started
 
 1. Ensure .NET 8 SDK is installed.
-2. Follow the setup guidance in `Docs/ProjectRules.md`.
-3. Prototype features according to the roadmap in the GDD.
-
+2. Restore dependencies and compile:
+   ```bash
+   dotnet restore
+   dotnet build Linebreak.sln
+   ```
+3. Execute the automated tests before committing:
+   ```bash
+   dotnet test
+   ```
+4. Run the terminal experience from the application project:
+   ```bash
+   dotnet run --project Src/App/Linebreak.App.csproj
+   ```
+5. Prototype features according to the roadmap in the GDD.
 

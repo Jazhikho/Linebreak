@@ -28,6 +28,7 @@ These rules extend the global Cursor user rules for this project’s non-engine 
 - **Explicit typing everywhere**; do not use `var` when the type is not obvious. Prefer `readonly`/`const` for configuration values.
 - **No ternary operators**. Use clear `if` blocks.
 - Keep public APIs and files small: target **~10 methods per class**; if exceeding, refactor.
+- At the top of every C# source file, include a short comment block summarising the file’s responsibility, key logic flows, and the primary methods or members it exposes.
 - Provide XML doc comments for every public class, method, and property describing purpose, parameters, and return values.
 - Organise classes: fields, constructors, public members, internal/protected, then private helpers.
 - Treat warnings as errors. Resolve analyzers and linters before pushing.

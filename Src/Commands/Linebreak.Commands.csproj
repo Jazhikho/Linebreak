@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Linebreak.Commands</RootNamespace>
+    <AssemblyName>Linebreak.Commands</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Linebreak.Core.csproj" />
+    <ProjectReference Include="..\UI\Linebreak.UI.csproj" />
+  </ItemGroup>
+</Project>
+
